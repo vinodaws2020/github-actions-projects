@@ -51,8 +51,10 @@ jobs:
         cache: maven
     - name: test maven
       run: mvn test
+      
   Build-and-sonar-scan:
     runs-on: self-hosted
+    needs: test
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
