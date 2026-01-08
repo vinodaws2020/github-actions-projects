@@ -74,8 +74,8 @@ jobs:
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v7.0.0
       with:
-        host: ${{ secrets.SONARQUBE_HOST }}
-        login: ${{ secrets.SONARQUBE_TOKEN }}   
+        host: ${{ var.SONAR_HOST }}
+        login: ${{ var.SONAR_TOKEN }}   
       # Check the Quality Gate status.
     - name: SonarQube Quality
       id: sonarqube-quality
@@ -83,6 +83,6 @@ jobs:
       with:
           pollingTimeoutSec: 600
       env:
-          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          SONAR_TOKEN: ${{ var.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ var.SONAR_HOST }}
         
