@@ -51,3 +51,35 @@ jobs:
         cache: maven
     - name: test maven
       run: mvn test
+  Build-and-sonar-scan:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: build project
+      run: mvn package
+    - name: Checking out
+      uses: actions/checkout@v4
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarQube Scan
+      uses: kitabisa/sonarqube-action@v7.0.0
+      with:
+        host: ${{ secrets.SONARQUBE_HOST }}
+        login: ${{ secrets.SONARQUBE_TOKEN }}   
+      # Check the Quality Gate status.
+    - name: SonarQube Quality
+      id: sonarqube-quality
+      uses: sonarsource/sonarqube-quality-gate-action@master
+      with:
+          pollingTimeoutSec: 600
+      env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+        
